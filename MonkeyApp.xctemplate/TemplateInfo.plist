@@ -93,6 +93,28 @@
 		<dict>
 			<key>ProductType</key>
 			<string>com.apple.product-type.application</string>
+			<key>Configurations</key>
+			<dict>
+				<key>Debug</key>
+				<dict>
+					<key>ENABLE_USER_SCRIPT_SANDBOXING</key>
+	    			<string>NO</string>
+	    			<key>GENERATE_INFOPLIST_FILE</key>
+	    			<string>NO</string>
+	    			<key>INFOPLIST_FILE</key>
+	    			<string>$(PROJECT_NAME)/Info.plist</string>
+				</dict>
+				<key>Release</key>
+				<dict>
+					<key>ENABLE_USER_SCRIPT_SANDBOXING</key>
+	    			<string>NO</string>
+	    			<key>GENERATE_INFOPLIST_FILE</key>
+	    			<string>NO</string>
+	    			<key>INFOPLIST_FILE</key>
+	    			<string>$(PROJECT_NAME)/Info.plist</string>
+				</dict>
+			</dict>
+		
 			<key>SharedSettings</key>
 			<dict>
 				<key>MONKEYDEV_DEFAULT_BUNDLEID</key>
@@ -187,7 +209,7 @@
 		<key>SharedSettings</key>
 		<dict>
 			<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-			<string>8.0</string>
+			<string>15.0</string>
 		</dict>
 	</dict>
 	<key>Components</key>
