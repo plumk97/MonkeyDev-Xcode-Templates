@@ -17,6 +17,7 @@
 #import <objc/runtime.h>
 #import <mach/mach_init.h>
 #import <mach/mach_error.h>
+#import <Security/Security.h>
 
 enum {
     BLOCK_HAS_COPY_DISPOSE =  (1 << 25),
@@ -430,3 +431,61 @@ NSString* vmmap(){
 }
 
 
+
+NSString *listClassMethodAddress(Class cls) {
+    unsigned int count = 0;
+    Method *methods = class_copyMethodList(cls, &count);
+    NSMutableString * result = [[NSMutableString alloc] init];
+    for (int i = 0; i < count; i++) {
+        SEL sel = method_getName(methods[i]);
+        IMP imp = method_getImplementation(methods[i]);
+        [result appendString:[NSString stringWithFormat:@"%s - %p\n", sel_getName(sel), imp]];
+
+    }
+    free(methods);
+    
+    // 获取元类
+    Class metaCls = object_getClass(cls);
+    unsigned int classCount = 0;
+    Method *classMethods = class_copyMethodList(metaCls, &classCount);
+    for (unsigned int i = 0; i < classCount; i++) {
+        SEL sel = method_getName(classMethods[i]);
+        IMP imp = method_getImplementation(classMethods[i]);
+        [result appendString:[NSString stringWithFormat:@"+ %s -> %p\n", sel_getName(sel), imp]];
+    }
+    free(classMethods);
+    
+    return result;
+}
+
+
+void dumpAllKeychainItems() {
+    NSDictionary *query = @{
+            (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+            (__bridge id)kSecReturnAttributes: @YES,
+            (__bridge id)kSecReturnData: @YES,
+            (__bridge id)kSecMatchLimit: (__bridge id)kSecMatchLimitAll
+        };
+
+        CFTypeRef result = NULL;
+        OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+
+        if (status == errSecSuccess) {
+            NSArray *items = (__bridge NSArray *)result;
+            for (NSDictionary *item in items) {
+                NSString *account = item[(__bridge id)kSecAttrAccount];
+                NSString *service = item[(__bridge id)kSecAttrService];
+                NSData *data = item[(__bridge id)kSecValueData];
+                NSString *value = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+                NSLog(@"🔑 Keychain Item:");
+                NSLog(@"  Service: %@", service);
+                NSLog(@"  Account: %@", account);
+                NSLog(@"  Value: %@", value);
+            }
+        } else {
+            NSLog(@"读取 Keychain 失败: %d", (int)status);
+        }
+
+        if (result) CFRelease(result);
+}

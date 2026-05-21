@@ -28,3 +28,7 @@ NSString* ivars(vm_address_t address);
 NSString* choose(const char* classname);
 
 NSString* vmmap();
+
+NSString *listClassMethodAddress(Class cls);
+
+void dumpAllKeychainItems();

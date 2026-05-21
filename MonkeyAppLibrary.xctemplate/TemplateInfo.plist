@@ -106,6 +106,8 @@
 			<dict>
 				<key>OTHER_LDFLAGS</key>
 				<string>$(inherited) -weak_library $(MonkeyDevPath)/Frameworks/libsubstrate.dylib -lcycript -framework RevealServer</string>
+				<key>WARNING_CFLAGS</key>
+				<string>-Wno-strict-prototypes</string>
 				<key>VALIDATE_PRODUCT</key>
 				<string>NO</string>
 				<key>GCC_OPTIMIZATION_LEVEL</key>
@@ -245,7 +247,9 @@
 		<string>Tools/LLDBTools.mm</string>
 		<string>___PACKAGENAME___-Prefix.pch:objC:importFoundation</string>
 		<string>___PACKAGENAME___-Prefix.pch:objC:importTheosPrefix</string>
-		<string>AntiAntiDebug/AntiAntiDebug.m</string>
+		<string>MockDevice/MockDevice.h</string>
+		<string>MockDevice/MockDevice.m</string>
+		<string>MockDevice/mock_device_hook.m</string>
 		<string>fishhook/fishhook.c</string>
 		<string>fishhook/fishhook.h</string>
 		<string>___PACKAGENAMEASIDENTIFIER___.h</string>
@@ -475,16 +479,33 @@
 		<key>*:*:importTheosPrefix</key>
 		<string>#import &quot;/opt/theos/Prefix.pch&quot;  //path/to/theos/Prefix.pch</string>
 		<key>*:*:importFoundation</key>
-		<string>#import &lt;Foundation/Foundation.h&gt;
-</string>
-		<key>AntiAntiDebug/AntiAntiDebug.m</key>
+		<string>#import &lt;Foundation/Foundation.h&gt;</string>
+		<key>MockDevice/MockDevice.h</key>
 		<dict>
 			<key>Group</key>
 			<array>
-				<string>AntiAntiDebug</string>
+				<string>MockDevice</string>
 			</array>
 			<key>Path</key>
-			<string>AntiAntiDebug/AntiAntiDebug.m</string>
+			<string>MockDevice/MockDevice.h</string>
+		</dict>
+		<key>MockDevice/MockDevice.m</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>MockDevice</string>
+			</array>
+			<key>Path</key>
+			<string>MockDevice/MockDevice.m</string>
+		</dict>
+		<key>MockDevice/mock_device_hook.m</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>MockDevice</string>
+			</array>
+			<key>Path</key>
+			<string>MockDevice/mock_device_hook.m</string>
 		</dict>
 		<key>fishhook/fishhook.c</key>
 		<dict>
