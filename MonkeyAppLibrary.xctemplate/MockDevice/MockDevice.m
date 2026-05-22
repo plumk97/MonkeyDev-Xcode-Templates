@@ -187,7 +187,7 @@ static id pick(NSArray *arr) {
     // system
     self.system = [MKSystemInfo new];
     self.system.isICloudAvailable = YES;
-    self.system.languageCode = @"zh-Hans-CN";
+    self.system.languageCode = @"en";
     self.system.s0 = 1;
     self.system.s1 = 1;
     self.system.sandBoxDirDeviceId = rndi(10000, 999999);
@@ -199,7 +199,7 @@ static id pick(NSArray *arr) {
     self.system.systemName = @"iOS";
     self.system.systemUpdateTime = time(NULL) - rndi(10000, 300000);
     self.system.systemVersion = pick(@[@"15.0",@"16.0",@"17.0"]);
-    self.system.timeZone = @"Asia/Shanghai (GMT+8) offset 28800";
+    self.system.timeZone = @"America/New_York";
 }
 
 @end
