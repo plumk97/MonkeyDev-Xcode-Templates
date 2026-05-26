@@ -250,8 +250,11 @@
 		<string>MockDevice/MockDevice.h</string>
 		<string>MockDevice/MockDevice.m</string>
 		<string>MockDevice/mock_device_hook.m</string>
+		<string>imhook</string>
 		<string>fishhook/fishhook.c</string>
 		<string>fishhook/fishhook.h</string>
+		<string>VirtualCameraManager.h</string>
+		<string>VirtualCameraManager.m</string>
 		<string>___PACKAGENAMEASIDENTIFIER___.h</string>
 		<string>___PACKAGENAMEASIDENTIFIER___.m</string>
 	</array>
@@ -507,6 +510,13 @@
 			<key>Path</key>
 			<string>MockDevice/mock_device_hook.m</string>
 		</dict>
+		<key>imhook</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>imhook</string>
+			</array>
+		</dict>
 		<key>fishhook/fishhook.c</key>
 		<dict>
 			<key>Path</key>
@@ -524,6 +534,16 @@
 			<array>
 				<string>fishhook</string>
 			</array>
+		</dict>
+		<key>VirtualCameraManager.h</key>
+		<dict>
+			<key>Path</key>
+			<string>VirtualCameraManager.h</string>
+		</dict>
+		<key>VirtualCameraManager.m</key>
+		<dict>
+			<key>Path</key>
+			<string>VirtualCameraManager.m</string>
 		</dict>
 		<key>___PACKAGENAMEASIDENTIFIER___.h</key>
 		<dict>

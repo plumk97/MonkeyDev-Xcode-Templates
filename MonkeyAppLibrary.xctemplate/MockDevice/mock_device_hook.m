@@ -395,9 +395,8 @@ static int my_uname(struct utsname *value) {
 
 // MARK: - 库检测
 static const char *hidden_libs[] = {
-    "HilyDylib",
+    "___FILEBASENAME___",
     "libsubstrate",
-    "imhook",
     "libcycript",
     "RevealServer",
     NULL
@@ -1018,7 +1017,7 @@ static void init(void) {
             {"statfs", my_statfs, (void *)&orig_statfs},
             {"stat", my_stat, (void *)&orig_stat},
             {"lstat", my_lstat, (void *)&orig_lstat},
-            {"getifaddrs", my_getifaddrs, (void *)&orig_getifaddrs},
+            {"getifaddrs", my_getifaddrs, (void *)&orig_getifaddrs}
         }, 18);
 
     CHLoadLateClass(NSString);

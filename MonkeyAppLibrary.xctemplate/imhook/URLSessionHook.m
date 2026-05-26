@@ -8,12 +8,9 @@
 #import "URLSessionHook.h"
 #import "imhook.h"
 #import <CaptainHook/CaptainHook.h>
-#import <objc/message.h>
-#import <objc/runtime.h>
 #import "IMHookNetworkLog.h"
 
 typedef void(^NSURLSessionCompletionHandler)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error);
-typedef void(^NSURLSessionChallengeCompletionHandler)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential);
 
 CHDeclareClass(NSURLSession);
 CHDeclareClass(NSURLSessionConfiguration);
@@ -23,11 +20,6 @@ static NSString * const kIMHookSOCKSProxyKey = @"SOCKSProxy";
 static NSString * const kIMHookSOCKSPortKey = @"SOCKSPort";
 static NSString *kIMHookSOCKSHost = nil;
 static NSNumber *kIMHookSOCKSPort = nil;
-static SEL kIMHookOriginalSessionChallengeSelector = NULL;
-static SEL kIMHookOriginalTaskChallengeSelector = NULL;
-
-typedef void (*IMHookSessionChallengeIMP)(id, SEL, NSURLSession *, NSURLAuthenticationChallenge *, NSURLSessionChallengeCompletionHandler);
-typedef void (*IMHookTaskChallengeIMP)(id, SEL, NSURLSession *, NSURLSessionTask *, NSURLAuthenticationChallenge *, NSURLSessionChallengeCompletionHandler);
 
 static inline NSDictionary *IMHookSOCKSProxyDictionary(void) {
     if (kIMHookSOCKSHost.length == 0 || kIMHookSOCKSPort == nil) {
@@ -69,110 +61,6 @@ void IMHookConfigureSOCKSProxy(NSString * _Nullable host, NSNumber * _Nullable p
     kIMHookSOCKSHost = [trimmedHost copy];
     kIMHookSOCKSPort = port;
     NSLog(@"SOCKS5 enabled %@:%@", kIMHookSOCKSHost, kIMHookSOCKSPort);
-}
-
-static BOOL IMHookClassImplementsSelectorDirectly(Class cls, SEL selector) {
-    unsigned int methodCount = 0;
-    Method *methods = class_copyMethodList(cls, &methodCount);
-    BOOL found = NO;
-    
-    for (unsigned int index = 0; index < methodCount; index++) {
-        if (method_getName(methods[index]) == selector) {
-            found = YES;
-            break;
-        }
-    }
-    
-    free(methods);
-    return found;
-}
-
-static BOOL IMHookShouldHookChallengeClass(Class cls) {
-    if (cls == Nil) {
-        return NO;
-    }
-    
-    NSBundle *bundle = [NSBundle bundleForClass:cls];
-    NSString *bundlePath = bundle.bundlePath ?: @"";
-    if (bundlePath.length == 0) {
-        return YES;
-    }
-    
-    if ([bundlePath hasPrefix:@"/System/Library/"] || [bundlePath hasPrefix:@"/usr/"]) {
-        return NO;
-    }
-    
-    return YES;
-}
-
-static void IMHookSessionDidReceiveChallenge(id self, SEL _cmd, NSURLSession *session, NSURLAuthenticationChallenge *challenge, NSURLSessionChallengeCompletionHandler completionHandler) {
-    
-    NSURLSessionChallengeCompletionHandler wrappedCompletionHandler = ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential) {
-        if (completionHandler) {
-            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-        }
-    };
-    
-    ((IMHookSessionChallengeIMP)objc_msgSend)(self, kIMHookOriginalSessionChallengeSelector, session, challenge, wrappedCompletionHandler);
-}
-
-static void IMHookTaskDidReceiveChallenge(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask *task, NSURLAuthenticationChallenge *challenge, NSURLSessionChallengeCompletionHandler completionHandler) {
-    
-    NSURLSessionChallengeCompletionHandler wrappedCompletionHandler = ^(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential) {
-        if (completionHandler) {
-            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-        }
-    };
-    
-    ((IMHookTaskChallengeIMP)objc_msgSend)(self, kIMHookOriginalTaskChallengeSelector, session, task, challenge, wrappedCompletionHandler);
-}
-
-static void IMHookSwizzleChallengeSelector(Class cls, SEL selector, SEL originalSelector, IMP replacementIMP) {
-    Method method = class_getInstanceMethod(cls, selector);
-    if (method == NULL || class_getInstanceMethod(cls, originalSelector) != NULL) {
-        return;
-    }
-    
-    const char *typeEncoding = method_getTypeEncoding(method);
-    class_addMethod(cls, originalSelector, method_getImplementation(method), typeEncoding);
-    class_replaceMethod(cls, selector, replacementIMP, typeEncoding);
-    NSLog(@"Challenge hook installed %@ %@", NSStringFromClass(cls), NSStringFromSelector(selector));
-}
-
-static void IMHookInstallChallengeHooks(void) {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        kIMHookOriginalSessionChallengeSelector = NSSelectorFromString(@"imhook_original_URLSession_didReceiveChallenge_completionHandler:");
-        kIMHookOriginalTaskChallengeSelector = NSSelectorFromString(@"imhook_original_URLSession_task_didReceiveChallenge_completionHandler:");
-        
-        int classCount = objc_getClassList(NULL, 0);
-        if (classCount <= 0) {
-            return;
-        }
-        
-        Class *classes = (__unsafe_unretained Class *)malloc(sizeof(Class) * classCount);
-        classCount = objc_getClassList(classes, classCount);
-        
-        SEL sessionSelector = @selector(URLSession:didReceiveChallenge:completionHandler:);
-        SEL taskSelector = @selector(URLSession:task:didReceiveChallenge:completionHandler:);
-        
-        for (int index = 0; index < classCount; index++) {
-            Class cls = classes[index];
-            if (!IMHookShouldHookChallengeClass(cls)) {
-                continue;
-            }
-            
-            if (IMHookClassImplementsSelectorDirectly(cls, sessionSelector)) {
-                IMHookSwizzleChallengeSelector(cls, sessionSelector, kIMHookOriginalSessionChallengeSelector, (IMP)IMHookSessionDidReceiveChallenge);
-            }
-            
-            if (IMHookClassImplementsSelectorDirectly(cls, taskSelector)) {
-                IMHookSwizzleChallengeSelector(cls, taskSelector, kIMHookOriginalTaskChallengeSelector, (IMP)IMHookTaskDidReceiveChallenge);
-            }
-        }
-        
-        free(classes);
-    });
 }
 
 CHOptimizedClassMethod0(self, NSURLSessionConfiguration *, NSURLSessionConfiguration, defaultSessionConfiguration) {
@@ -391,7 +279,7 @@ CHOptimizedMethod3(self, void, NSURLSession,
 void hookURLSession(void) {
     CHLoadLateClass(NSURLSession);
     CHLoadLateClass(NSURLSessionConfiguration);
-    IMHookInstallChallengeHooks();
+    
     CHClassHook0(NSURLSessionConfiguration, defaultSessionConfiguration);
     CHClassHook0(NSURLSessionConfiguration, ephemeralSessionConfiguration);
     CHClassHook1(NSURLSessionConfiguration, backgroundSessionConfigurationWithIdentifier);

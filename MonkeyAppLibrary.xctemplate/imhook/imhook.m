@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "URLSessionHook.h"
 #import "URLConnection.h"
+#import "PassSSL.h"
 
 @implementation IMHookOptions
 @end
@@ -20,6 +21,7 @@
 void imhook(IMHookOptions * _Nullable options) {
     IMHookConfigureSOCKSProxy(options.socksHost, options.socksPort);
 }
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -143,6 +145,7 @@ CHConstructor{
 
     hookURLSession();
     hookURLConnection();
+    hookPassSSL();
 }
 
 #pragma clang diagnostic pop

@@ -6,9 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <imhook/NSData+Hex.h>
+#import "NSData+Hex.h"
+#import "PassSSL.h"
 // 其他 public header
-#import <imhook/HookURLProtocol.h>
+#import "HookURLProtocol.h"
 
 //! Project version number for imhook.
 FOUNDATION_EXPORT double imhookVersionNumber;
