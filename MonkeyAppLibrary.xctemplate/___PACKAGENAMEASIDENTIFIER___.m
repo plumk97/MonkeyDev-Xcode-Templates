@@ -13,8 +13,8 @@
 #import <UIKit/UIKit.h>
 #import <Cycript/Cycript.h>
 #import <MDCycriptManager.h>
-#import "imhook/imhook.h"
-#import "imhook/PassSSL.h"
+#import "imhook/imhook/imhook.h"
+#import "imhook/imhook/PassSSL.h"
 
 CHConstructor{
     printf(INSERT_SUCCESS_WELCOME);
