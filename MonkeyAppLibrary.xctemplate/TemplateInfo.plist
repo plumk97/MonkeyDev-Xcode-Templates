@@ -516,6 +516,8 @@
 			<array>
 				<string>imhook</string>
 			</array>
+			<key>Path</key>
+			<string>imhook</string>
 		</dict>
 		<key>fishhook/fishhook.c</key>
 		<dict>
