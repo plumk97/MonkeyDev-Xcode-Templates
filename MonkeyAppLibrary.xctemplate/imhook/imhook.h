@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSString *socksHost;
 @property (nonatomic, strong, nullable) NSNumber *socksPort;
+@property (nonatomic, copy, nullable) NSString *teamId;
 
 @end
 

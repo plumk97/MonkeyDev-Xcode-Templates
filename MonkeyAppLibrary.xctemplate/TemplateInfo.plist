@@ -547,6 +547,16 @@
 			<key>Path</key>
 			<string>VirtualCameraManager.m</string>
 		</dict>
+		<key>AppClean.h</key>
+		<dict>
+			<key>Path</key>
+			<string>AppClean.h</string>
+		</dict>
+		<key>AppClean.m</key>
+		<dict>
+			<key>Path</key>
+			<string>AppClean.m</string>
+		</dict>
 		<key>___PACKAGENAMEASIDENTIFIER___.h</key>
 		<dict>
 			<key>Path</key>

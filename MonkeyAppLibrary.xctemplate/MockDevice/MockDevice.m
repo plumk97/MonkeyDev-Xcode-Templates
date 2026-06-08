@@ -106,10 +106,10 @@ static id pick(NSArray *arr) {
     // 机型模板（density + 分辨率 + CPU 必须一致）
     //
     NSArray *devices = @[
-        @{@"code":@"iPhone12,1",@"w":@828, @"h":@1792, @"scale":@2, @"cpu":@6},
-        @{@"code":@"iPhone13,2",@"w":@1170,@"h":@2532,@"scale":@3, @"cpu":@6},
-        @{@"code":@"iPhone14,2",@"w":@1170,@"h":@2532,@"scale":@3, @"cpu":@6},
-        @{@"code":@"iPhone15,3",@"w":@1290,@"h":@2796,@"scale":@3, @"cpu":@6},
+//        @{@"code":@"iPhone12,1",@"w":@828, @"h":@1792, @"scale":@2, @"cpu":@6},
+//        @{@"code":@"iPhone13,2",@"w":@1170,@"h":@2532,@"scale":@3, @"cpu":@6},
+//        @{@"code":@"iPhone14,2",@"w":@1170,@"h":@2532,@"scale":@3, @"cpu":@6},
+        @{@"code":@"iPhone16,2",@"w":@1290,@"h":@2796,@"scale":@3, @"cpu":@6},
     ];
 
     NSDictionary *tpl = pick(devices);
@@ -198,7 +198,7 @@ static id pick(NSArray *arr) {
     self.system.systemFileName = [NSString stringWithFormat:@"com.apple.os.update-%@@/dev/disk1s1", filenameId];
     self.system.systemName = @"iOS";
     self.system.systemUpdateTime = time(NULL) - rndi(10000, 300000);
-    self.system.systemVersion = pick(@[@"15.0",@"16.0",@"17.0"]);
+    self.system.systemVersion = pick(@[@"26.3.0"]);
     self.system.timeZone = @"America/New_York";
 }
 

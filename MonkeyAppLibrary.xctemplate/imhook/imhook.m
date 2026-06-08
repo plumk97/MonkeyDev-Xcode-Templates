@@ -14,12 +14,16 @@
 #import "URLSessionHook.h"
 #import "URLConnection.h"
 #import "PassSSL.h"
+#import "TeamIdHook.h"
 
 @implementation IMHookOptions
 @end
 
 void imhook(IMHookOptions * _Nullable options) {
     IMHookConfigureSOCKSProxy(options.socksHost, options.socksPort);
+    if (options.teamId.length > 0) {
+        hookTeamId(options.teamId);
+    }
 }
 
 #pragma clang diagnostic push

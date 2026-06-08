@@ -286,14 +286,14 @@ void hookURLSession(void) {
     CHClassHook1(NSURLSession, sessionWithConfiguration);
     CHClassHook3(NSURLSession, sessionWithConfiguration, delegate, delegateQueue);
     CHHook3(NSURLSession, initWithConfiguration, delegate, delegateQueue);
-    CHHook1(NSURLSession, dataTaskWithURL);
-    CHHook1(NSURLSession, dataTaskWithRequest);
-    CHHook2(NSURLSession, dataTaskWithRequest, completionHandler);
-    CHHook2(NSURLSession, dataTaskWithURL, completionHandler);
-    
-    CHHook2(NSURLSession, uploadTaskWithRequest, fromData);
-    CHHook2(NSURLSession, uploadTaskWithRequest, fromFile);
-    CHHook3(NSURLSession, uploadTaskWithRequest, fromData, completionHandler);
-    CHHook3(NSURLSession, uploadTaskWithRequest, fromFile, completionHandler);
-    CHHook3(NSURLSession, URLSession, task, needNewBodyStream);
+//    CHHook1(NSURLSession, dataTaskWithURL);
+//    CHHook1(NSURLSession, dataTaskWithRequest);
+//    CHHook2(NSURLSession, dataTaskWithRequest, completionHandler);
+//    CHHook2(NSURLSession, dataTaskWithURL, completionHandler);
+//    
+//    CHHook2(NSURLSession, uploadTaskWithRequest, fromData);
+//    CHHook2(NSURLSession, uploadTaskWithRequest, fromFile);
+//    CHHook3(NSURLSession, uploadTaskWithRequest, fromData, completionHandler);
+//    CHHook3(NSURLSession, uploadTaskWithRequest, fromFile, completionHandler);
+//    CHHook3(NSURLSession, URLSession, task, needNewBodyStream);
 }
