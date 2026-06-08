@@ -255,6 +255,8 @@
 		<string>fishhook/fishhook.h</string>
 		<string>VirtualCameraManager.h</string>
 		<string>VirtualCameraManager.m</string>
+		<string>AppClean.h</string>
+		<string>AppClean.m</string>
 		<string>___PACKAGENAMEASIDENTIFIER___.h</string>
 		<string>___PACKAGENAMEASIDENTIFIER___.m</string>
 	</array>
